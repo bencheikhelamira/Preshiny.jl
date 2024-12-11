@@ -1,0 +1,151 @@
+---
+title: "Performance de Julia et RShiny dans l'Exploration des Réseaux de Neurones Convolutifs"
+
+format:
+  revealjs:
+    theme: solarized
+    transition: concave
+    slide-number: true
+    self-contained: true
+---
+
+:::: {.columns}
+::: {.column width="50%"}   
+![](julia-logo-300.png){width=280px}
+
+**Professeur :**  
+**Rémi**
+:::
+
+::: {.column width="50%"}
+![](logo.png){width=280px}
+
+**Membres du groupe :**  
+**El Amira Cerine BENCHEIKH**  
+**MEKKAOUI Sara**  
+**BELOUARDA Manal**  
+:::
+::::
+---
+
+# Plan 📋
+
+Voici le plan :  
+1. Introduction  
+2. Réseaux de Neurones et Contexte  
+3. Comparaison des langages Julia et Python  
+4. Construction et Entraînement du Modèle  
+5. Résultats et Visualisations  
+6. RShiny et Intégration  
+7. Conclusion  
+
+---
+
+# Introduction  
+
+- Présentation du projet : exploration des réseaux de neurones convolutifs (CNN).  
+- Objectif : Évaluer les performances de Julia dans le Machine Learning.  
+- Focus : Implémentation des réseaux de neurones en Julia et application RShiny
+
+---
+
+# Réseaux de Neurones et Contexte  
+
+- Définition des CNN et leur rôle dans le traitement d'images.  
+- Exemple d'application : reconnaissance d'images.  
+- Importance de la normalisation des données et de l'encodage des labels.
+
+---
+
+# Comparaison des Langages  
+
+- **Julia :**  
+  - Performances élevées.  
+  - Gestion simplifiée des matrices et des calculs lourds.  
+
+- **Python :**  
+  - Large communauté et écosystème riche.  
+  - Mais : limitations en termes de rapidité pour des tâches lourdes.  
+
+---
+
+# Comparaison des langages
+
+![](ok.png){width=100%}
+
+---
+
+# Construction et Entraînement du Modèle  
+
+- Utilisation et implémentation des couches : Convolution, MaxPooling, Dense, Softmax.  
+- Fonction de perte : Entropie croisée.  
+- Optimisation avec des métriques comme : précision, recall, et F1-Score.
+
+---
+
+# Couche de convolution
+
+![](convolutif.png){width=100%}
+
+---
+
+# Résultats et Visualisations  
+
+- Visualisation de la matrice de confusion.  
+- Courbes de perte et d'accuracy.  
+- Insights : Julia a montré une supériorité dans l'entraînement des modèles CNN.  
+
+---
+
+# Matrice de confusion
+
+![](matriceconf.jpeg){width=100%}
+
+---
+
+# RShiny et Intégration  
+
+- Création d'une application interactive pour visualiser les résultats :  
+  - Histogrammes des pixels.  
+  - Nuages de points.  
+
+- Intégration Julia et R via le package **Rulia**.  
+- Tableau de bord interactif pour explorer les prédictions.
+
+---
+
+# Histogrammes des pixels
+
+![](histogramme_pix.PNG){width=100%}
+
+---
+
+# Nuage de points
+
+![](0.PNG){width=100%}
+
+---
+
+# Exemple de l'application de prédiction de classes
+
+![](sara1.png){width=100%} 
+
+---
+
+![](sara3.png){width=100%}
+
+---
+
+# Tableau de bord
+
+![](perftab.jpeg){width=100%}
+
+---
+
+# Conclusion ✅
+
+- Julia offre des performances remarquables pour les tâches de Machine Learning.  
+- L'intégration avec RShiny a permis de rendre les résultats interactifs et compréhensibles.  
+
+Merci pour votre attention ! 😊  
+Des questions ?  

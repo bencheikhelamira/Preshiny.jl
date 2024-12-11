@@ -1,0 +1,74 @@
+---
+title: "sized"
+output: html_document
+date: "2024-11-13"
+---
+La partie de redimentionement de l'image dessinée 
+durant ce projet jai fait au probleme de sur apprentissage . cest pour ca jai ajouter des dropout a mon problem de modele et cest regleeeeee !
+
+Fonction de redimentionement 
+```{r}
+library(imager)
+library(png)  # Utilise ce package pour charger des images PNG
+
+# Fonction pour charger, convertir et redimensionner une image PNG de l'app
+process_image <- function(img_path, new_nrow, new_ncol, save_path) {
+    # 1 Charger l'image PNG
+    img <- readPNG(img_path)  # Utiliser readPNG pour charger une image PNG
+    
+    # 2 Convertir l'image en matrice (si elle est en couleur, tu peux la convertir en niveaux de gris)
+    if (length(dim(img)) == 3) {
+      img_gray <- apply(img, c(1, 2), function(x) mean(x))  # Conversion en niveaux de gris
+    } else {
+      img_gray <- img  # Si l'image est déjà en niveaux de gris
+    }
+    
+    # 3. Redimensionner la matrice à la taille souhaitée
+    resize_matrix <- function(mat, new_nrow, new_ncol) {
+      x <- seq(1, ncol(mat), length.out = new_ncol)
+      y <- seq(1, nrow(mat), length.out = new_nrow)
+      approx_matrix <- matrix(0, nrow = new_nrow, ncol = new_ncol)
+      
+      for (i in 1:new_nrow) {
+        for (j in 1:new_ncol) {
+          approx_matrix[i, j] <- mat[round(y[i]), round(x[j])]
+        }
+      }
+      return(approx_matrix)
+    }
+  
+    # Redimensionner l'image en niveaux de gris
+    resized_img <- resize_matrix(img_gray, new_nrow, new_ncol)
+    
+    # Afficher la matrice redimensionnée (pour vérifier)
+    #print(dim(resized_img))
+    plot(resized_img, main = "Image Redimensionnée", col = gray.colors(256))
+    
+    # Sauvegarder l'image redimensionnée en PNG
+    writePNG(resized_img, save_path)
+}
+
+```
+Appel de fct
+```{r}
+# Exemple d'utilisation de la fonction
+img_path <- "/var/folders/_9/rghgqm1163q0lx49qdk88d7w0000gn/T//Rtmpiaz8qX/file10211b1d409b.png"
+save_path <- "/Users/pro/Desktop/m1-ssd/outilsR/dessiner.png"
+process_image(img_path, 28, 28, save_path)
+```
+
+
+```{r}
+# Charger Rulia
+#library(Rulia)
+
+jl(`
+   include("/Users/pro/Desktop/m1-ssd/outilsR/Testfinal.jl")
+  # Appel de la fonction pour obtenir la prédiction
+  image_path = "/Users/pro/Desktop/m1-ssd/outilsR/resized_image1.png"
+  model_checkpoint_path = "/Users/pro/Desktop/m1-ssd/outilsR/model-checkpoint.jld2"
+  predicted_class = predict_image_class(image_path, model_checkpoint_path)
+  println("La classe prédite est : ", predicted_class)
+`)
+```
+

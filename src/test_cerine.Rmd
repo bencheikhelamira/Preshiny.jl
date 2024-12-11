@@ -1,0 +1,70 @@
+---
+title: "test_cerine"
+output: html_document
+date: "2024-11-14"
+---
+```{r}
+# Charger les packages nécessaires
+library(imager)
+library(dplyr)
+
+# Fonction pour charger et structurer les images
+load_mnist_images <- function(directory) {
+  # Obtenir la liste des sous-dossiers training et testing
+  data_dirs <- list.dirs(directory, recursive = FALSE)  # Inclut training et testing
+  data_list <- list()  # Initialiser une liste pour stocker les données
+
+  # Parcourir chaque sous-dossier (training et testing)
+  for (data_dir in data_dirs) {
+    # Obtenir la liste des sous-dossiers de classe (0, 1, 2, ..., 9)
+    class_dirs <- list.dirs(data_dir, recursive = FALSE)
+    
+    # Parcourir chaque dossier de classe (0, 1, 2, ..., 9)
+    for (class_dir in class_dirs) {
+      class_label <- basename(class_dir)  # Extraire le nom de la classe (0, 1, ..., 9)
+      image_files <- list.files(class_dir, pattern = "\\.png$", full.names = TRUE)  # Liste des fichiers image
+      
+      # Charger chaque image et l'ajouter à la liste avec sa classe
+      for (file in image_files) {
+        img <- load.image(file)
+        img_data <- as.data.frame(as.cimg(img))  # Convertir l'image en data frame
+        img_data$class <- class_label            # Ajouter la classe de l'image
+        img_data$file <- basename(file)          # Ajouter le nom de fichier
+        img_data$dataset <- basename(data_dir)   # Ajouter "training" ou "testing"
+        data_list <- append(data_list, list(img_data))  # Ajouter à la liste
+      }
+    }
+  }
+  
+  # Combiner toutes les images en un seul data frame
+  image_data <- bind_rows(data_list)
+  return(image_data)
+}
+
+# Utiliser la fonction pour charger les données
+directory <- "C:/Users/utilisateur/Documents/Rshiny/mnist_png"  # Chemin vers votre dossier principal
+mnist_data <- load_mnist_images(directory)
+
+
+```
+
+```{r}
+# Vérification de la structure de mnist_data pour s'assurer que les données sont bien chargées
+str(mnist_data)
+
+# Filtrer l'image de la classe "0" dans le dataset d'entraînement
+img_sample <- mnist_data %>% 
+  filter(class == 0 & dataset == "training") %>% 
+  slice(1)  # Choisir la première image de la classe 0
+
+# Affichage de l'image avec ggplot
+ggplot(img_sample, aes(x = x, y = y, fill = value)) +
+  geom_raster() +  # Utiliser geom_raster pour afficher les pixels
+  scale_fill_gradient(low = "white", high = "black") +  # De blanc à noir pour l'intensité des pixels
+  coord_equal() +  # Assurer une échelle égale sur les axes pour une forme correcte
+  theme_minimal() +
+  labs(title = "Exemple d'image MNIST de la classe 0 (Training)")  # Titre de l'image
+
+
+```
+

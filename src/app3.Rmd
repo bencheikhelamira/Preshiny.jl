@@ -1,0 +1,80 @@
+---
+title: "rshiny_part"
+output: html_document
+date: "2024-11-14"
+---
+
+```{r}
+
+#install.packages("keras")
+#library(keras)
+
+#Chargez le dataset MNIST (il est intégré dans Keras)
+#mnist <- dataset_mnist()
+
+# mnist$train$x contient les images d'entraînement (28x28 pixels)
+# mnist$train$y contient les labels (chiffres entre 0 et 9)
+
+```
+
+```{r}
+# Installez et chargez le package ggplot2 pour les visualisations
+library(ggplot2)
+
+# Exemple de création d'un histogramme de la distribution d'un pixel (par exemple le premier pixel)
+pixel_values <- mnist_data$train$x[,,1]  # Sélectionne le premier pixel pour toutes les images
+labels <- mnist_data$train$y  # Les labels associés
+
+# Créez un dataframe pour l'utiliser avec ggplot2
+data <- data.frame(
+  Pixel_Value = as.vector(pixel_values),
+  Label = factor(rep(labels, each = 28*28))  # Chaque image est 28x28 pixels
+)
+
+# Visualisation avec ggplot
+ggplot(data, aes(x = Pixel_Value, fill = Label)) +
+  geom_histogram(binwidth = 0.5, position = "dodge") +
+  labs(title = "Distribution des valeurs de pixels pour chaque classe", x = "Valeur du pixel", y = "Fréquence")
+
+```
+
+```{r}
+# Installez et chargez Shiny
+library(shiny)
+
+# Interface utilisateur
+ui <- fluidPage(
+  titlePanel("Visualisation de la distribution des pixels MNIST"),
+  sidebarLayout(
+    sidebarPanel(
+      selectInput("class", "Sélectionnez une classe", choices = 0:9)
+    ),
+    mainPanel(
+      plotOutput("distPlot")
+    )
+  )
+)
+
+# Serveur
+server <- function(input, output) {
+  
+  output$distPlot <- renderPlot({
+    # Filtrage des données en fonction de la classe sélectionnée
+    selected_class <- as.integer(input$class)
+    
+    # Filtrer les pixels pour la classe sélectionnée
+    filtered_data <- data[data$Label == selected_class, ]
+    
+    # Créer le graphique
+    ggplot(filtered_data, aes(x = Pixel_Value)) +
+      geom_histogram(binwidth = 0.5, fill = "skyblue", color = "black") +
+      labs(title = paste("Distribution des pixels pour la classe", selected_class), 
+           x = "Valeur du pixel", y = "Fréquence")
+  })
+}
+
+# Lancer l'application Shiny
+shinyApp(ui = ui, server = server)
+
+```
+
